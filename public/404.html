@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Park</title>
+    <script>
+      // SPA fallback for GitHub Pages: redirect unknown routes to index.html
+      // keeping the path in the querystring so the app can restore it.
+      (function () {
+        var base = "/smart-park/";
+        var path = location.pathname.replace(base, "/");
+        var search = location.search || "";
+        var hash = location.hash || "";
+        location.replace(base + "?p=" + encodeURIComponent(path + search + hash));
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
+
