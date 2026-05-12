@@ -37,11 +37,13 @@ export default function SmartParkLogo(props: {
           ? "text-[11px]"
           : "text-xs";
 
+  const logoSrc = `${import.meta.env.BASE_URL}logo-sf-sp.png`;
+
   return (
     <div className="flex items-center gap-3">
       {imgOk ? (
         <img
-          src="/logo-sf-sp.png"
+          src={logoSrc}
           alt="Smart Park"
           className={`${logoSizeClass} object-contain`}
           onError={() => setImgOk(false)}
