@@ -1,0 +1,5 @@
+Cole a imagem do logo aqui com o nome:
+
+logo-sf-sp.png
+
+Exemplo: copie o arquivo enviado (logo Smart Park) para `public/logo-sf-sp.png`.
