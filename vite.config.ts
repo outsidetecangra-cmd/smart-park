@@ -5,5 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   // GitHub Pages (repo: outsidetecangra-cmd/smart-park)
   base: "/smart-park/",
+  build: {
+    sourcemap: false,
+  },
   plugins: [react()],
 })

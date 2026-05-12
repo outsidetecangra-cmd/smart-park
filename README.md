@@ -2,6 +2,10 @@
 
 Sistema web (MVP) de controle de estacionamento, com login simples e persistência via LocalStorage (sem backend).
 
+## Licença / Uso
+
+Este projeto é **proprietário**. Para detalhes, veja `LICENSE_PROPRIETARY.md`.
+
 ## Rodar localmente
 
 ```bash

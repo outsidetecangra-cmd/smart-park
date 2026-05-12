@@ -5,9 +5,76 @@
     <link rel="icon" type="image/png" href="logo-sf-sp.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Park</title>
+    <style>
+      /* Bloqueia seleção de texto */
+      * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      /* Bloqueia arrastar imagens e elementos */
+      img,
+      video,
+      svg,
+      canvas {
+        -webkit-user-drag: none;
+        user-drag: none;
+        pointer-events: none;
+      }
+
+      body {
+        -webkit-touch-callout: none;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Bloqueia clique direito
+      document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
+
+      // Bloqueia copiar, cortar e colar
+      document.addEventListener("copy", function (e) {
+        e.preventDefault();
+      });
+
+      document.addEventListener("cut", function (e) {
+        e.preventDefault();
+      });
+
+      document.addEventListener("paste", function (e) {
+        e.preventDefault();
+      });
+
+      // Bloqueia arrastar arquivos/imagens
+      document.addEventListener("dragstart", function (e) {
+        e.preventDefault();
+      });
+
+      // Bloqueia atalhos comuns
+      document.addEventListener("keydown", function (e) {
+        const key = e.key.toLowerCase();
+
+        if (
+          (e.ctrlKey && key === "c") || // copiar
+          (e.ctrlKey && key === "u") || // ver código fonte
+          (e.ctrlKey && key === "s") || // salvar página
+          (e.ctrlKey && key === "p") || // imprimir
+          (e.ctrlKey && key === "a") || // selecionar tudo
+          (e.ctrlKey && e.shiftKey && key === "i") || // DevTools
+          (e.ctrlKey && e.shiftKey && key === "j") || // console
+          (e.ctrlKey && e.shiftKey && key === "c") || // inspecionar elemento
+          e.key === "F12"
+        ) {
+          e.preventDefault();
+          return false;
+        }
+      });
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
