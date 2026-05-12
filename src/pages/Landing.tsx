@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { LogIn } from "lucide-react";
 import SmartParkLogo from "../components/SmartParkLogo";
+import Footer from "../components/Footer";
 
 export default function Landing() {
   return (
@@ -62,6 +63,7 @@ export default function Landing() {
             </div>
           </div>
         </section>
+        <Footer />
       </div>
     </div>
   );

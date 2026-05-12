@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import {
   BarChart3,
@@ -8,7 +9,7 @@ import {
   SquareParking,
   Users,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import Footer from "./Footer";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 
@@ -41,6 +42,7 @@ export default function Layout() {
           <main className="min-w-0 flex-1 rounded-2xl bg-white/70 p-4 shadow-soft backdrop-blur sm:p-6">
             <Outlet />
           </main>
+          <Footer />
         </div>
       </div>
 

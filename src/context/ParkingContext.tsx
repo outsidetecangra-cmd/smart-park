@@ -205,7 +205,7 @@ export function ParkingProvider(props: { children: ReactNode }) {
     const plate = plateRaw.trim().toUpperCase();
     if (!plate) return { ok: false, error: "Informe a placa." };
     const vehicle = findActiveByPlate(plate);
-    if (!vehicle) return { ok: false, error: "VeÃ­culo nÃ£o encontrado." };
+    if (!vehicle) return { ok: false, error: "Veículo não encontrado." };
 
     const exitAt = nowIso();
     const totalMinutes = diffMinutes(vehicle.entryAt, exitAt);
