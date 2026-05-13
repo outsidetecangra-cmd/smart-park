@@ -2,6 +2,40 @@ export type VehicleType = "car" | "motorcycle" | "van";
 export type SpotStatus = "available" | "occupied" | "reserved";
 export type PaymentMethod = "cash" | "pix" | "card" | "courtesy";
 
+export type IncidentDamageType =
+  | "amassado"
+  | "arranhao"
+  | "quebra"
+  | "pneu"
+  | "vidro"
+  | "outro";
+
+export type IncidentSeverity = "leve" | "moderado" | "grave";
+
+export type IncidentPhoto = {
+  id: string;
+  dataUrl: string;
+  capturedAt: string;
+};
+
+export type IncidentDamage = {
+  id: string;
+  type: IncidentDamageType;
+  severity: IncidentSeverity;
+  location: string;
+  note?: string;
+};
+
+export type IncidentReport = {
+  id: string;
+  plate: string;
+  createdAt: string;
+  createdBy?: string;
+  summary?: string;
+  damages: IncidentDamage[];
+  photos: IncidentPhoto[];
+};
+
 export type User = {
   id: string;
   name: string;
@@ -30,6 +64,7 @@ export type Vehicle = {
   driverPhone?: string;
   spotId: string;
   entryAt: string;
+  incidentReports?: IncidentReport[];
 };
 
 export type VehicleHistory = {
@@ -42,6 +77,7 @@ export type VehicleHistory = {
   totalMinutes: number;
   paidCents: number;
   paymentMethod?: PaymentMethod;
+  incidentReports?: IncidentReport[];
 };
 
 export type Payment = {

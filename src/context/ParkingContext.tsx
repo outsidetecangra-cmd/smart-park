@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import type {
+  IncidentReport,
   ParkingSpot,
   Payment,
   PaymentMethod,
@@ -26,6 +27,14 @@ type ParkingState = {
   activeVehicles: Vehicle[];
   history: VehicleHistory[];
   payments: Payment[];
+  addIncidentReport: (params: {
+    plate: string;
+    report: Omit<IncidentReport, "id" | "plate" | "createdAt"> & {
+      id?: string;
+      plate?: string;
+      createdAt?: string;
+    };
+  }) => { ok: boolean; error?: string };
   setSettings: (next: Settings) => void;
   setSpots: (next: ParkingSpot[]) => void;
   setActiveVehicles: (next: Vehicle[]) => void;
@@ -177,6 +186,7 @@ export function ParkingProvider(props: { children: ReactNode }) {
       exitAt,
       totalMinutes,
       paidCents: totalCents,
+      incidentReports: vehicle.incidentReports,
     };
 
     setActiveVehicles((prev) => prev.filter((v) => v.id !== vehicle.id));
@@ -229,6 +239,7 @@ export function ParkingProvider(props: { children: ReactNode }) {
       totalMinutes,
       paidCents: totalCents,
       paymentMethod: method,
+      incidentReports: vehicle.incidentReports,
     };
 
     const payment: Payment = {
@@ -260,6 +271,44 @@ export function ParkingProvider(props: { children: ReactNode }) {
     return { ok: true };
   };
 
+  const addIncidentReport: ParkingState["addIncidentReport"] = ({
+    plate: plateRaw,
+    report,
+  }) => {
+    const plate = plateRaw.trim().toUpperCase();
+    if (!plate) return { ok: false, error: "Informe a placa." };
+
+    const vehicle = findActiveByPlate(plate);
+    if (!vehicle) return { ok: false, error: "Veículo não encontrado." };
+
+    const now = nowIso();
+    const normalizedReport: IncidentReport = {
+      id: report.id ?? `inc_${crypto.randomUUID()}`,
+      plate,
+      createdAt: report.createdAt ?? now,
+      createdBy: report.createdBy,
+      summary: report.summary,
+      damages: report.damages ?? [],
+      photos: report.photos ?? [],
+    };
+
+    setActiveVehicles((prev) =>
+      prev.map((v) =>
+        v.id === vehicle.id
+          ? {
+              ...v,
+              incidentReports: [
+                normalizedReport,
+                ...(v.incidentReports ?? []),
+              ],
+            }
+          : v,
+      ),
+    );
+
+    return { ok: true };
+  };
+
   const value = useMemo<ParkingState>(
     () => ({
       settings,
@@ -277,6 +326,7 @@ export function ParkingProvider(props: { children: ReactNode }) {
       estimateExit,
       confirmExit,
       confirmExitWithPayment,
+      addIncidentReport,
     }),
     [settings, spots, activeVehicles, history, payments],
   );

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { AlertTriangle, Plus, Search } from "lucide-react";
+import { Link } from "react-router-dom";
 
 type VehicleRow = {
   plate: string;
@@ -29,7 +30,7 @@ const MOCK: VehicleRow[] = [
   },
   {
     plate: "GHI7J89",
-    model: "Moto Honda",
+    model: "Honda CG 160",
     client: "Carlos Nunes",
     type: "Moto",
     entryAt: "11:05",
@@ -38,8 +39,10 @@ const MOCK: VehicleRow[] = [
 ];
 
 function badgeClass(status: VehicleRow["status"]) {
-  if (status === "Estacionado") return "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200";
-  if (status === "Finalizado") return "bg-slate-100 text-slate-700 ring-1 ring-slate-200";
+  if (status === "Estacionado")
+    return "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200";
+  if (status === "Finalizado")
+    return "bg-slate-100 text-slate-700 ring-1 ring-slate-200";
   return "bg-amber-50 text-amber-800 ring-1 ring-amber-200";
 }
 
@@ -129,13 +132,14 @@ export default function Vehicles() {
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  <button
-                    type="button"
-                    className="sp-btn-ghost px-3 py-1.5"
-                    title="Registrar sinistro (mock)"
+                  <Link
+                    to={`/sinistro?placa=${encodeURIComponent(v.plate)}`}
+                    className="sp-btn-ghost inline-flex items-center gap-2 px-3 py-1.5"
+                    title="Registrar sinistro"
                   >
-                    <AlertTriangle size={16} className="text-amber-600" /> Sinistro
-                  </button>
+                    <AlertTriangle size={16} className="text-amber-600" />{" "}
+                    Sinistro
+                  </Link>
                 </td>
                 <td className="px-4 py-3">
                   <button type="button" className="sp-btn-ghost px-3 py-1.5">
@@ -166,12 +170,16 @@ export default function Vehicles() {
             <button type="button" className="mt-3 sp-btn-ghost w-full">
               Ver detalhes
             </button>
-            <button type="button" className="mt-2 sp-btn-ghost w-full">
+            <Link
+              to={`/sinistro?placa=${encodeURIComponent(v.plate)}`}
+              className="mt-2 sp-btn-ghost inline-flex w-full items-center justify-center gap-2"
+            >
               <AlertTriangle size={16} className="text-amber-600" /> Sinistro
-            </button>
+            </Link>
           </div>
         ))}
       </div>
     </div>
   );
 }
+

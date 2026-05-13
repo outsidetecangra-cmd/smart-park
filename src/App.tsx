@@ -14,6 +14,7 @@ import Vehicles from "./pages/Vehicles";
 import Clients from "./pages/Clients";
 import Reports from "./pages/Reports";
 import Movements from "./pages/Movements";
+import Incidents from "./pages/Incidents";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/movimentacoes" element={<Movements />} />
           <Route path="/movimentacoes/entrada" element={<VehicleEntry />} />
           <Route path="/movimentacoes/saida" element={<VehicleExit />} />
+          <Route path="/sinistro" element={<Incidents />} />
           <Route path="/clientes" element={<Clients />} />
           <Route path="/relatorios" element={<Reports />} />
           <Route path="/equipamentos" element={<Equipment />} />

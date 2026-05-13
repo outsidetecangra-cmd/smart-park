@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import {
+  AlertTriangle,
   BarChart3,
   Car,
   Cctv,
@@ -35,6 +36,7 @@ export default function Sidebar(props: { collapsed?: boolean }) {
           { to: "/veiculos", label: "Veículos", Icon: Car },
           { to: "/vagas", label: "Vagas", Icon: SquareParking },
           { to: "/movimentacoes", label: "Entradas/Saídas", Icon: DoorOpen },
+          { to: "/sinistro", label: "Sinistro", Icon: AlertTriangle },
           { to: "/clientes", label: "Clientes", Icon: Users },
           { to: "/relatorios", label: "Relatórios", Icon: BarChart3 },
           { to: "/equipamentos", label: "Equipamentos", Icon: Cctv },
@@ -64,9 +66,10 @@ export default function Sidebar(props: { collapsed?: boolean }) {
           onClick={logout}
           className="w-full rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-white/10 transition hover:bg-white/15 active:translate-y-[1px]"
         >
-          {collapsed ? "Sair" : "Sair"}
+          Sair
         </button>
       </div>
     </aside>
   );
 }
+
