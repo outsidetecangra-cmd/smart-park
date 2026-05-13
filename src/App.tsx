@@ -15,6 +15,7 @@ import Clients from "./pages/Clients";
 import Reports from "./pages/Reports";
 import Movements from "./pages/Movements";
 import Incidents from "./pages/Incidents";
+import Printers from "./pages/Printers";
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/clientes" element={<Clients />} />
           <Route path="/relatorios" element={<Reports />} />
           <Route path="/equipamentos" element={<Equipment />} />
+          <Route path="/impressoras" element={<Printers />} />
           <Route path="/configuracoes" element={<Settings />} />
         </Route>
 

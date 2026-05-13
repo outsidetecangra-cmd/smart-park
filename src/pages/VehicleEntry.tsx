@@ -2,6 +2,9 @@ import { useMemo, useState } from "react";
 import { useParking } from "../context/ParkingContext";
 import type { VehicleType } from "../types";
 
+const PRINTER_AGENT_URL = "http://localhost:3199";
+const LS_PRINTER = "sp_printer_selected_v1";
+
 const VEHICLE_TYPES: { key: VehicleType; label: string }[] = [
   { key: "car", label: "Carro" },
   { key: "motorcycle", label: "Moto" },
@@ -9,7 +12,7 @@ const VEHICLE_TYPES: { key: VehicleType; label: string }[] = [
 ];
 
 export default function VehicleEntry() {
-  const { spots, registerEntry } = useParking();
+  const { spots, registerEntry, settings } = useParking();
   const availableSpots = useMemo(
     () => spots.filter((s) => s.status === "available"),
     [spots],
@@ -22,13 +25,20 @@ export default function VehicleEntry() {
   const [driverName, setDriverName] = useState("");
   const [driverPhone, setDriverPhone] = useState("");
   const [spotId, setSpotId] = useState(availableSpots[0]?.id ?? "");
-  const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    kind: "ok" | "err";
+    text: string;
+  } | null>(null);
 
   const canSubmit = plate.trim() && model.trim() && color.trim() && spotId;
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     setMessage(null);
+
+    const normalizedPlate = plate.trim().toUpperCase();
+    const chosenSpotNumber = spots.find((s) => s.id === spotId)?.number ?? null;
+
     const res = registerEntry({
       plate,
       model,
@@ -39,20 +49,62 @@ export default function VehicleEntry() {
       spotId,
     });
     if (!res.ok) {
-      setMessage({ kind: "err", text: res.error ?? "Erro ao registrar entrada." });
+      setMessage({
+        kind: "err",
+        text: res.error ?? "Erro ao registrar entrada.",
+      });
       return;
     }
+
     setMessage({ kind: "ok", text: "Entrada registrada com sucesso!" });
     setPlate("");
     setModel("");
     setColor("");
     setDriverName("");
     setDriverPhone("");
+
+    // Impressão automática (plug and play via Printer Agent no Windows)
+    try {
+      const now = new Date();
+      const content = [
+        settings.parkingName || "SMART PARK",
+        "CUPOM DE ENTRADA",
+        "------------------------------",
+        `Placa: ${normalizedPlate}`,
+        `Modelo: ${model.trim()}`,
+        `Cor: ${color.trim()}`,
+        chosenSpotNumber ? `Vaga: #${chosenSpotNumber}` : "Vaga: —",
+        `Entrada: ${now.toLocaleString("pt-BR")}`,
+        "------------------------------",
+        "Guarde este cupom.",
+        "",
+      ].join("\n");
+
+      let selectedPrinter = "";
+      try {
+        selectedPrinter = localStorage.getItem(LS_PRINTER) || "";
+      } catch {
+        selectedPrinter = "";
+      }
+
+      const payload: { content: string; printerName?: string } = { content };
+      if (selectedPrinter) payload.printerName = selectedPrinter;
+
+      await fetch(`${PRINTER_AGENT_URL}/print`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    } catch {
+      // Se falhar, o registro segue normalmente; a impressão pode ser feita manualmente.
+    }
   }
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-slate-900">Entrada de veículos</h1>
+      <h1 className="text-xl font-semibold text-slate-900">
+        Entrada de veículos
+      </h1>
       <p className="mt-1 text-sm text-slate-600">
         Registre a entrada e selecione uma vaga disponível.
       </p>
@@ -70,7 +122,9 @@ export default function VehicleEntry() {
               />
             </div>
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-slate-700">Modelo</label>
+              <label className="text-sm font-medium text-slate-700">
+                Modelo
+              </label>
               <input
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
@@ -168,10 +222,14 @@ export default function VehicleEntry() {
             disabled={!canSubmit || availableSpots.length === 0}
             className="w-full sp-btn-primary disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Registrar entrada
+            Registrar entrada (imprime cupom)
           </button>
+          <div className="text-xs text-slate-500">
+            Para impressão automática, inicie o serviço local em `printer-agent`.
+          </div>
         </div>
       </form>
     </div>
   );
 }
+

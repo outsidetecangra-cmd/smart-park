@@ -6,6 +6,7 @@ import {
   Cctv,
   DoorOpen,
   Gauge,
+  Printer,
   Settings as SettingsIcon,
   SquareParking,
   Users,
@@ -40,6 +41,7 @@ export default function Sidebar(props: { collapsed?: boolean }) {
           { to: "/clientes", label: "Clientes", Icon: Users },
           { to: "/relatorios", label: "Relatórios", Icon: BarChart3 },
           { to: "/equipamentos", label: "Equipamentos", Icon: Cctv },
+          { to: "/impressoras", label: "Impressoras", Icon: Printer },
           { to: "/configuracoes", label: "Configurações", Icon: SettingsIcon },
         ].map(({ to, label, Icon }) => (
           <NavLink
@@ -72,4 +74,3 @@ export default function Sidebar(props: { collapsed?: boolean }) {
     </aside>
   );
 }
-

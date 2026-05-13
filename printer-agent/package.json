@@ -1,0 +1,16 @@
+{
+  "name": "smart-park-printer-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agente local de impressão (Windows) para o Smart Park",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
+
